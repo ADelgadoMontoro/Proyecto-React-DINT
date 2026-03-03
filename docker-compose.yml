@@ -1,0 +1,12 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: videojuegos-backend
+    ports:
+      - "8787:8787"
+    environment:
+      - BACKEND_PORT=8787
+      - JWT_SECRET=change_this_secret_in_production
+    volumes:
+      - ./backend/data:/app/data

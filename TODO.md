@@ -46,4 +46,46 @@
 ## 9) Ajustes finales
 - [x] Actualizar `README.md` con instrucciones del proyecto de videojuegos (arranque frontend + json-server).
 - [x] Revisar estilos para que menus horizontales, listado y modal sean usables en desktop y movil.
-- [ ] Hacer prueba manual completa de flujo: listar, filtrar, buscar, detalle y eliminar.
+
+## 10) V2 - API real con JWT (IDE Antigravity + IA)
+- [x] Definir stack del backend y justificarlo por escrito (lenguaje, framework, base de datos, ORM y por que se elige).
+- [x] Crear estructura del backend separada del prototipo `json-server` (carpeta `backend/`).
+- [x] Configurar variables de entorno (`JWT_SECRET`, puertos, etc.).
+- [x] Configurar persistencia real para usuarios y videojuegos (almacenamiento persistente JSON en `backend/data/db.json`).
+- [x] Crear modelo de usuario con rol (`user` y `admin`).
+- [x] Crear modelo de videojuego con relacion al usuario propietario (`userId`).
+- [x] Implementar registro de usuarios (`/auth/register`).
+- [x] Implementar login de usuarios (`/auth/login`) devolviendo JWT.
+- [x] Implementar middleware de autenticacion JWT.
+- [x] Implementar middleware de autorizacion por rol.
+- [x] Crear endpoint protegido: obtener videojuegos de todos los usuarios con paginacion.
+- [x] Crear endpoint protegido: obtener videojuegos del usuario autenticado con paginacion.
+- [x] Crear endpoint protegido: obtener videojuego por `id`.
+- [x] Crear endpoint protegido: crear videojuego nuevo (asociado al usuario autenticado).
+- [x] Crear endpoint protegido: eliminar videojuego (solo propietario).
+- [x] Permitir que el administrador pueda eliminar cualquier videojuego.
+- [x] Incluir en respuestas del listado el nombre del usuario que anadio cada videojuego.
+- [x] Documentar endpoints con ejemplos de request/response y codigos de error.
+
+## 11) V2 - Frontend manual (React)
+- [x] Instalar y usar `axios` para reemplazar llamadas `fetch`.
+- [x] Crear `AuthContext` para guardar estado de autenticacion (token, usuario, rol, login/logout).
+- [x] Guardar sesion de forma persistente (por ejemplo `localStorage`) y restaurarla al recargar.
+- [x] Configurar `react-router-dom` con rutas publicas y protegidas.
+- [x] Crear pagina publica `/login`.
+- [x] Crear pagina publica `/register`.
+- [x] Crear ruta protegida de listado de todos los videojuegos.
+- [x] Crear ruta protegida de listado de mis videojuegos.
+- [x] Crear ruta protegida para alta de videojuego.
+- [x] Crear ruta protegida para detalle de videojuego.
+- [x] Redirigir a `/login` cuando se intenta entrar en una ruta protegida sin sesion.
+- [x] Crear componente global de carga (`Loading`) para peticiones al backend.
+- [x] Mostrar en el listado de todos los videojuegos el nombre del usuario creador.
+- [x] Adaptar acciones de eliminar segun permisos (propietario o admin).
+
+## 12) V2 - Docker y cierre
+- [x] Dockerizar backend con `Dockerfile`.
+- [x] Crear `docker-compose.yml` para backend con persistencia de datos.
+- [x] Añadir scripts/comandos de arranque para entorno local y Docker.
+- [x] Probar flujo completo V2: registro, login, CRUD, permisos por rol y paginacion.
+- [x] Actualizar `README.md` con guia de V2 (arranque local, variables, Docker y rutas).

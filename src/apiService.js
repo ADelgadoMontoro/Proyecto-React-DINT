@@ -1,29 +1,50 @@
-export const fetchAPI = async (url) => {
-  const response = await fetch(url);
-  return response.json();
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8787";
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return {};
+  }
+  return {    
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
 };
 
-export const deleteAPI = async (url) => {
-  const response = await fetch(url, {
-    method: "DELETE",
-  });
-  return response.json();
+export const loginAPI = async (username, password) => {
+  const response = await axios.post(`${API_URL}/auth/login`, { username, password });
+  return response.data;
 };
 
-export const addAPI = async (url, newItem) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newItem),
-  });
-  return response.json();
+export const registerAPI = async (userData) => {
+  const response = await axios.post(`${API_URL}/auth/register`, userData);
+  return response.data;
 };
 
-export const editAPI = async (url, updatedItem) => {
-  const response = await fetch(url, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedItem),
-  });
-  return response.json();
+export const getVideojuegosAPI = async (page = 1, limit = 12) => {
+  const response = await axios.get(`${API_URL}/videojuegos?page=${page}&limit=${limit}`, getAuthHeaders());
+  return response.data;
+};
+
+export const getMisVideojuegosAPI = async (page = 1, limit = 12) => {
+  const response = await axios.get(`${API_URL}/videojuegos/mios?page=${page}&limit=${limit}`, getAuthHeaders());
+  return response.data;
+};
+
+export const getVideojuegoByIdAPI = async (id) => {
+  const response = await axios.get(`${API_URL}/videojuegos/${id}`, getAuthHeaders());
+  return response.data;
+};
+
+export const addVideojuegoAPI = async (payload) => {
+  const response = await axios.post(`${API_URL}/videojuegos`, payload, getAuthHeaders());
+  return response.data;
+};
+
+export const deleteVideojuegoAPI = async (id) => {
+  const response = await axios.delete(`${API_URL}/videojuegos/${id}`, getAuthHeaders());
+  return response.data;
 };

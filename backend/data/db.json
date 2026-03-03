@@ -1,0 +1,468 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@local.dev",
+      "passwordHash": "$2a$10$WTsThwIvoHEPJ8P0ZcaFzutjXhc3fX9r/R5uFM/c0Z9249wfSpYNe",
+      "role": "admin",
+      "createdAt": "2026-03-03T22:39:50.518Z"
+    },
+    {
+      "id": 2,
+      "username": "Adrian",
+      "email": "adrian@local.dev",
+      "passwordHash": "$2a$10$WTsThwIvoHEPJ8P0ZcaFzutjXhc3fX9r/R5uFM/c0Z9249wfSpYNe",
+      "role": "user",
+      "createdAt": "2026-03-03T23:05:54.666450Z"
+    },
+    {
+      "id": 3,
+      "username": "Luis",
+      "email": "luis@local.dev",
+      "passwordHash": "$2a$10$WTsThwIvoHEPJ8P0ZcaFzutjXhc3fX9r/R5uFM/c0Z9249wfSpYNe",
+      "role": "user",
+      "createdAt": "2026-03-03T23:05:54.666474Z"
+    },
+    {
+      "id": 4,
+      "username": "Marquez",
+      "email": "marquez@local.dev",
+      "passwordHash": "$2a$10$WTsThwIvoHEPJ8P0ZcaFzutjXhc3fX9r/R5uFM/c0Z9249wfSpYNe",
+      "role": "user",
+      "createdAt": "2026-03-03T23:08:50.665892Z"
+    }
+  ],
+  "videojuegos": [
+    {
+      "id": 1,
+      "nombre": "Elden Ring",
+      "descripcion": "Action RPG de mundo abierto con exploracion libre y combate desafiante.",
+      "fechaLanzamiento": "2022-02-25",
+      "compania": "FromSoftware",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Rol",
+        "Aventura"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/eldenringv2/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=E3Huy2cdih0",
+      "userId": 1,
+      "createdAt": "2026-03-03T22:45:00.000Z"
+    },
+    {
+      "id": 2,
+      "nombre": "Hades",
+      "descripcion": "Roguelike de accion con progreso permanente y partidas dinamicas.",
+      "fechaLanzamiento": "2020-09-17",
+      "compania": "Supergiant Games",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Switch"
+      ],
+      "categorias": [
+        "Arcade",
+        "Rol",
+        "Aventura"
+      ],
+      "precio": 24.99,
+      "urlImagen": "https://picsum.photos/seed/hadesv2/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=91t0ha9x0AE",
+      "userId": 1,
+      "createdAt": "2026-03-03T22:45:10.000Z"
+    },
+    {
+      "id": 3,
+      "nombre": "Street Fighter 6",
+      "descripcion": "Lucha competitiva con controles clasicos y modernos.",
+      "fechaLanzamiento": "2023-06-02",
+      "compania": "Capcom",
+      "plataformas": [
+        "PC",
+        "PS5"
+      ],
+      "categorias": [
+        "Lucha",
+        "Arcade"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/sf6v2/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=HfQW3-5xY3M",
+      "userId": 1,
+      "createdAt": "2026-03-03T22:45:20.000Z"
+    },
+    {
+      "id": 4,
+      "nombre": "Alan Wake 2",
+      "descripcion": "Survival horror narrativo con investigacion y accion en tercera persona.",
+      "fechaLanzamiento": "2023-10-27",
+      "compania": "Remedy Entertainment",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Aventura",
+        "Shooter"
+      ],
+      "precio": 49.99,
+      "urlImagen": "https://picsum.photos/seed/adrian_aw2/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=dlQ3FeNu5Yw",
+      "userId": 2,
+      "createdAt": "2026-03-04T00:04:00Z"
+    },
+    {
+      "id": 5,
+      "nombre": "Forza Horizon 5",
+      "descripcion": "Conduccion arcade en mundo abierto con eventos y multijugador.",
+      "fechaLanzamiento": "2021-11-09",
+      "compania": "Playground Games",
+      "plataformas": [
+        "PC",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Arcade",
+        "Deporte"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/adrian_fh5/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=FYH9n37B7Yw",
+      "userId": 2,
+      "createdAt": "2026-03-04T00:05:00Z"
+    },
+    {
+      "id": 6,
+      "nombre": "Disco Elysium",
+      "descripcion": "RPG narrativo con decisiones y sistema de dialogos profundo.",
+      "fechaLanzamiento": "2019-10-15",
+      "compania": "ZA/UM",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Switch"
+      ],
+      "categorias": [
+        "Rol",
+        "Aventura"
+      ],
+      "precio": 39.99,
+      "urlImagen": "https://picsum.photos/seed/adrian_de/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=YV2lp6p_gXw",
+      "userId": 2,
+      "createdAt": "2026-03-04T00:06:00Z"
+    },
+    {
+      "id": 7,
+      "nombre": "Inside",
+      "descripcion": "Plataformas y puzles con ambientacion oscura y narrativa ambiental.",
+      "fechaLanzamiento": "2016-06-29",
+      "compania": "Playdead",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Switch"
+      ],
+      "categorias": [
+        "Plataformas",
+        "Puzzle"
+      ],
+      "precio": 19.99,
+      "urlImagen": "https://picsum.photos/seed/adrian_inside/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=E0V2rPVQWfM",
+      "userId": 2,
+      "createdAt": "2026-03-04T00:07:00Z"
+    },
+    {
+      "id": 8,
+      "nombre": "Red Dead Redemption 2",
+      "descripcion": "Aventura de mundo abierto en el lejano oeste con historia cinematica.",
+      "fechaLanzamiento": "2018-10-26",
+      "compania": "Rockstar Games",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Aventura",
+        "Shooter"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/luis_rdr2/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=eaW0tYpxyp0",
+      "userId": 3,
+      "createdAt": "2026-03-04T00:08:00Z"
+    },
+    {
+      "id": 9,
+      "nombre": "Sekiro: Shadows Die Twice",
+      "descripcion": "Accion y aventura con combate exigente y enfoque en parrys.",
+      "fechaLanzamiento": "2019-03-22",
+      "compania": "FromSoftware",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One"
+      ],
+      "categorias": [
+        "Aventura",
+        "Rol"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/luis_sekiro/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=rXMX4YJ7Lks",
+      "userId": 3,
+      "createdAt": "2026-03-04T00:09:00Z"
+    },
+    {
+      "id": 10,
+      "nombre": "Slay the Spire",
+      "descripcion": "Estrategia por turnos con construccion de mazos y partidas roguelike.",
+      "fechaLanzamiento": "2019-01-23",
+      "compania": "Mega Crit",
+      "plataformas": [
+        "PC",
+        "Switch",
+        "Android",
+        "iOS"
+      ],
+      "categorias": [
+        "Estrategia",
+        "Puzzle"
+      ],
+      "precio": 24.99,
+      "urlImagen": "https://picsum.photos/seed/luis_sts/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=9SZUtyYSOjQ",
+      "userId": 3,
+      "createdAt": "2026-03-04T00:10:00Z"
+    },
+    {
+      "id": 11,
+      "nombre": "Cities: Skylines",
+      "descripcion": "Simulador de gestion urbana para construir y administrar ciudades.",
+      "fechaLanzamiento": "2015-03-10",
+      "compania": "Colossal Order",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Simulación",
+        "Estrategia"
+      ],
+      "precio": 29.99,
+      "urlImagen": "https://picsum.photos/seed/luis_cs/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=CpWe03NhXKs",
+      "userId": 3,
+      "createdAt": "2026-03-04T00:11:00Z"
+    },
+    {
+      "id": 12,
+      "nombre": "Overcooked! 2",
+      "descripcion": "Arcade cooperativo de cocina con caos y coordinacion en equipo.",
+      "fechaLanzamiento": "2018-08-07",
+      "compania": "Ghost Town Games",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Arcade",
+        "Educación"
+      ],
+      "precio": 24.99,
+      "urlImagen": "https://picsum.photos/seed/luis_over2/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=pQvVJb2Bf5o",
+      "userId": 3,
+      "createdAt": "2026-03-04T00:12:00Z"
+    },
+    {
+      "id": 13,
+      "nombre": "EA SPORTS FC 25",
+      "descripcion": "Videojuego de futbol con modos online, clubes y carrera.",
+      "fechaLanzamiento": "2025-09-27",
+      "compania": "EA Sports",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 69.99,
+      "urlImagen": "https://picsum.photos/seed/luis_fc25/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 3,
+      "createdAt": "2026-03-04T00:13:00Z"
+    },
+    {
+      "id": 14,
+      "nombre": "MotoGP 17",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 17, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2017-06-15",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 49.99,
+      "urlImagen": "https://picsum.photos/seed/motogp17/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:00:00Z"
+    },
+    {
+      "id": 15,
+      "nombre": "MotoGP 18",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 18, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2018-06-07",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 49.99,
+      "urlImagen": "https://picsum.photos/seed/motogp18/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:01:00Z"
+    },
+    {
+      "id": 16,
+      "nombre": "MotoGP 19",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 19, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2019-06-06",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 49.99,
+      "urlImagen": "https://picsum.photos/seed/motogp19/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:02:00Z"
+    },
+    {
+      "id": 17,
+      "nombre": "MotoGP 20",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 20, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2020-04-23",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 49.99,
+      "urlImagen": "https://picsum.photos/seed/motogp20/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:03:00Z"
+    },
+    {
+      "id": 18,
+      "nombre": "MotoGP 21",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 21, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2021-04-22",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 49.99,
+      "urlImagen": "https://picsum.photos/seed/motogp21/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:04:00Z"
+    },
+    {
+      "id": 19,
+      "nombre": "MotoGP 22",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 22, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2022-04-21",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/motogp22/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:05:00Z"
+    },
+    {
+      "id": 20,
+      "nombre": "MotoGP 23",
+      "descripcion": "Juego oficial del mundial de motociclismo MotoGP 23, con MotoGP, Moto2 y Moto3.",
+      "fechaLanzamiento": "2023-06-08",
+      "compania": "Milestone",
+      "plataformas": [
+        "PC",
+        "PS5",
+        "Xbox One",
+        "Switch"
+      ],
+      "categorias": [
+        "Deporte",
+        "Simulación"
+      ],
+      "precio": 59.99,
+      "urlImagen": "https://picsum.photos/seed/motogp23/800/450",
+      "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
+      "userId": 4,
+      "createdAt": "2026-03-04T01:06:00Z"
+    }
+  ]
+}
