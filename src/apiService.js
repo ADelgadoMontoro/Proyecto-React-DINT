@@ -24,8 +24,11 @@ export const registerAPI = async (userData) => {
   return response.data;
 };
 
-export const getVideojuegosAPI = async (page = 1, limit = 12) => {
-  const response = await axios.get(`${API_URL}/videojuegos?page=${page}&limit=${limit}`, getAuthHeaders());
+export const getVideojuegosAPI = async (page = 1, limit = 12, orden = "fecha") => {
+  const response = await axios.get(
+    `${API_URL}/videojuegos?page=${page}&limit=${limit}&orden=${orden}`,
+    getAuthHeaders()
+  );
   return response.data;
 };
 
@@ -46,5 +49,10 @@ export const addVideojuegoAPI = async (payload) => {
 
 export const deleteVideojuegoAPI = async (id) => {
   const response = await axios.delete(`${API_URL}/videojuegos/${id}`, getAuthHeaders());
+  return response.data;
+};
+
+export const votarVideojuegoAPI = async (id, tipo) => {
+  const response = await axios.post(`${API_URL}/videojuegos/${id}/votar`, { tipo }, getAuthHeaders());
   return response.data;
 };

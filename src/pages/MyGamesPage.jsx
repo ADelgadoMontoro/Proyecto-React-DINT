@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FormControl, Grid, InputLabel, MenuItem, Pagination, Select, Stack, Typography } from "@mui/material";
-import { getMisVideojuegosAPI } from "../apiService";
+import { getMisVideojuegosAPI, votarVideojuegoAPI } from "../apiService";
 import Loading from "../components/Loading";
 import GameCard from "../components/GameCard";
 
@@ -31,6 +31,15 @@ const MyGamesPage = () => {
   useEffect(() => {
     cargarMisJuegos(1, porPagina);
   }, [cargarMisJuegos, porPagina]);
+
+  const handleVote = async (id, tipo) => {
+    try {
+      await votarVideojuegoAPI(id, tipo);
+      await cargarMisJuegos(paginaActual, porPagina);
+    } catch (err) {
+      alert(err.response?.data?.message || "No se pudo registrar el voto");
+    }
+  };
 
   if (cargando) return <Loading text="Cargando mis videojuegos..." />;
 
@@ -64,7 +73,7 @@ const MyGamesPage = () => {
       <Grid container spacing={2}>
         {misJuegos.map((game) => (
           <Grid key={game.id} size={{ xs: 12, sm: 6, md: 4 }}>
-            <GameCard game={game} />
+            <GameCard game={game} onVote={handleVote} />
           </Grid>
         ))}
       </Grid>

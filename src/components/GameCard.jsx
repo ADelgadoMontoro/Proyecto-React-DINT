@@ -5,11 +5,14 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Chip,
   Stack,
   Typography
 } from "@mui/material";
+import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
+import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 
-const GameCard = ({ game }) => {
+const GameCard = ({ game, onVote }) => {
   const text =
     game.descripcion.length > 100
       ? game.descripcion.slice(0, 100) + "..."
@@ -43,9 +46,33 @@ const GameCard = ({ game }) => {
           </Typography>
           <Typography variant="body2">{game.precio} €</Typography>
         </Stack>
+
+        <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+          <Chip size="small" color="success" label={`Likes: ${game.likes || 0}`} />
+          <Chip size="small" color="error" label={`Dislikes: ${game.dislikes || 0}`} />
+          <Chip size="small" color="secondary" label={`Pop: ${game.popularidad || 0}`} />
+        </Stack>
       </CardContent>
 
       <CardActions>
+        <Button
+          size="small"
+          color="success"
+          startIcon={<ThumbUpAltOutlinedIcon />}
+          disabled={!onVote || game.votoUsuario !== null}
+          onClick={() => onVote && onVote(game.id, "like")}
+        >
+          Like
+        </Button>
+        <Button
+          size="small"
+          color="error"
+          startIcon={<ThumbDownAltOutlinedIcon />}
+          disabled={!onVote || game.votoUsuario !== null}
+          onClick={() => onVote && onVote(game.id, "dislike")}
+        >
+          Dislike
+        </Button>
         <Button component={RouterLink} to={`/videojuegos/${game.id}`} variant="contained" size="small">
           Ver detalle
         </Button>

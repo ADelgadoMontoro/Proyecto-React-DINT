@@ -78,6 +78,23 @@ const buildPaginated = (items, page, limit) => {
   };
 };
 
+const enrichGame = (game, users, currentUserId = null) => {
+  const owner = users.find((u) => Number(u.id) === Number(game.userId));
+  const votos = Array.isArray(game.votos) ? game.votos : [];
+  const likes = votos.filter((v) => v.tipo === "like").length;
+  const dislikes = votos.filter((v) => v.tipo === "dislike").length;
+  const votoUsuario = votos.find((v) => Number(v.userId) === Number(currentUserId))?.tipo || null;
+
+  return {
+    ...game,
+    usuario: owner ? owner.username : "desconocido",
+    likes,
+    dislikes,
+    popularidad: likes - dislikes,
+    votoUsuario
+  };
+};
+
 const authRequired = (req, res, next) => {
   const authHeader = req.headers.authorization || "";
   const [scheme, token] = authHeader.split(" ");
@@ -160,16 +177,18 @@ app.post("/auth/login", (req, res) => {
 app.get("/videojuegos", authRequired, (req, res) => {
   const { page, limit, offset } = parsePagination(req.query);
   const db = readDb();
+  const ordenarPor = req.query.orden || "fecha";
 
-  const enriched = db.videojuegos
-    .map((v) => {
-      const owner = db.users.find((u) => Number(u.id) === Number(v.userId));
-      return {
-        ...v,
-        usuario: owner ? owner.username : "desconocido"
-      };
-    })
-    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  const enriched = db.videojuegos.map((v) => enrichGame(v, db.users, req.user.sub));
+
+  if (ordenarPor === "popularidad") {
+    enriched.sort((a, b) => {
+      if (b.popularidad !== a.popularidad) return b.popularidad - a.popularidad;
+      return String(b.createdAt).localeCompare(String(a.createdAt));
+    });
+  } else {
+    enriched.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  }
 
   const data = enriched.slice(offset, offset + limit);
   return res.json({ data, ...buildPaginated(enriched, page, limit) });
@@ -181,7 +200,7 @@ app.get("/videojuegos/mios", authRequired, (req, res) => {
 
   const mine = db.videojuegos
     .filter((v) => Number(v.userId) === Number(req.user.sub))
-    .map((v) => ({ ...v, usuario: req.user.username }))
+    .map((v) => enrichGame(v, db.users, req.user.sub))
     .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 
   const data = mine.slice(offset, offset + limit);
@@ -196,11 +215,7 @@ app.get("/videojuegos/:id", authRequired, (req, res) => {
     return res.status(404).json({ message: "Videojuego no encontrado" });
   }
 
-  const owner = db.users.find((u) => Number(u.id) === Number(game.userId));
-  return res.json({
-    ...game,
-    usuario: owner ? owner.username : "desconocido"
-  });
+  return res.json(enrichGame(game, db.users, req.user.sub));
 });
 
 app.post("/videojuegos", authRequired, (req, res) => {
@@ -232,6 +247,7 @@ app.post("/videojuegos", authRequired, (req, res) => {
     precio: Number(precio) || 0,
     urlImagen: urlImagen || "",
     urlVideo: urlVideo || "",
+    votos: [],
     userId: req.user.sub,
     createdAt: new Date().toISOString()
   };
@@ -240,6 +256,42 @@ app.post("/videojuegos", authRequired, (req, res) => {
   writeDb(db);
 
   return res.status(201).json({ ...newGame, usuario: req.user.username });
+});
+
+app.post("/videojuegos/:id/votar", authRequired, (req, res) => {
+  const { tipo } = req.body;
+  if (tipo !== "like" && tipo !== "dislike") {
+    return res.status(400).json({ message: "tipo debe ser like o dislike" });
+  }
+
+  const db = readDb();
+  const game = db.videojuegos.find((v) => Number(v.id) === Number(req.params.id));
+
+  if (!game) {
+    return res.status(404).json({ message: "Videojuego no encontrado" });
+  }
+
+  if (!Array.isArray(game.votos)) {
+    game.votos = [];
+  }
+
+  const yaVoto = game.votos.some((v) => Number(v.userId) === Number(req.user.sub));
+  if (yaVoto) {
+    return res.status(409).json({ message: "Ya has votado este videojuego" });
+  }
+
+  game.votos.push({
+    userId: req.user.sub,
+    tipo,
+    createdAt: new Date().toISOString()
+  });
+
+  writeDb(db);
+
+  return res.json({
+    message: "Voto registrado",
+    game: enrichGame(game, db.users, req.user.sub)
+  });
 });
 
 app.delete("/videojuegos/:id", authRequired, (req, res) => {
