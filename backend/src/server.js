@@ -102,6 +102,17 @@ const enrichGame = (game, users, currentUserId = null) => {
       })
     : [];
 
+  const reportes = Array.isArray(game.reportes)
+    ? game.reportes.map((r) => {
+        const autor = users.find((u) => Number(u.id) === Number(r.userId));
+        return {
+          ...r,
+          usuario: r.usuario || (autor ? autor.username : "desconocido")
+        };
+      })
+    : [];
+  const reportadoPorUsuario = reportes.some((r) => Number(r.userId) === Number(currentUserId));
+
   return {
     ...game,
     usuario: owner ? owner.username : "desconocido",
@@ -109,7 +120,10 @@ const enrichGame = (game, users, currentUserId = null) => {
     dislikes,
     popularidad: likes - dislikes,
     votoUsuario,
-    comentarios
+    comentarios,
+    reportes,
+    reportesCount: reportes.length,
+    reportadoPorUsuario
   };
 };
 
@@ -267,6 +281,7 @@ app.post("/videojuegos", authRequired, (req, res) => {
     urlVideo: urlVideo || "",
     votos: [],
     comentarios: [],
+    reportes: [],
     userId: req.user.sub,
     createdAt: new Date().toISOString()
   };
@@ -383,6 +398,39 @@ app.delete("/videojuegos/:id/comentarios/:comentarioId", authRequired, (req, res
   writeDb(db);
 
   return res.json({ message: "Comentario eliminado" });
+});
+
+app.post("/videojuegos/:id/reportar", authRequired, (req, res) => {
+  const { motivo } = req.body;
+  const db = readDb();
+  const game = db.videojuegos.find((v) => Number(v.id) === Number(req.params.id));
+
+  if (!game) {
+    return res.status(404).json({ message: "Videojuego no encontrado" });
+  }
+
+  if (!Array.isArray(game.reportes)) {
+    game.reportes = [];
+  }
+
+  const yaReportado = game.reportes.some((r) => Number(r.userId) === Number(req.user.sub));
+  if (yaReportado) {
+    return res.status(409).json({ message: "Ya has reportado este videojuego" });
+  }
+
+  game.reportes.push({
+    userId: req.user.sub,
+    usuario: req.user.username,
+    motivo: motivo ? String(motivo).trim() : "",
+    createdAt: new Date().toISOString()
+  });
+
+  writeDb(db);
+
+  return res.json({
+    message: "Videojuego reportado",
+    game: enrichGame(game, db.users, req.user.sub)
+  });
 });
 
 app.delete("/videojuegos/:id", authRequired, (req, res) => {

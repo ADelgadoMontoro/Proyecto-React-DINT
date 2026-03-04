@@ -18,12 +18,14 @@ import {
   Box
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import Loading from "../components/Loading";
 import {
   addComentarioAPI,
   deleteComentarioAPI,
   deleteVideojuegoAPI,
-  getVideojuegoByIdAPI
+  getVideojuegoByIdAPI,
+  reportarVideojuegoAPI
 } from "../apiService";
 import { useAuth } from "../context/useAuth";
 
@@ -100,6 +102,17 @@ const GameDetailPage = () => {
     }
   };
 
+  const handleReportar = async () => {
+    try {
+      await reportarVideojuegoAPI(id);
+      const data = await getVideojuegoByIdAPI(id);
+      setGame(data);
+      alert("Videojuego reportado correctamente");
+    } catch (err) {
+      alert(err.response?.data?.message || "No se pudo reportar el videojuego");
+    }
+  };
+
   if (loading) return <Loading text="Cargando detalle..." />;
   if (error) return <Alert severity="error">{error}</Alert>;
   if (!game) return null;
@@ -138,12 +151,23 @@ const GameDetailPage = () => {
         </Stack>
 
         <Typography><strong>Precio:</strong> {game.precio} €</Typography>
+        <Typography><strong>Reportes:</strong> {game.reportesCount || 0}</Typography>
 
         {game.urlVideo && (
           <Link href={game.urlVideo} target="_blank" rel="noreferrer" underline="hover">
             Ver trailer
           </Link>
         )}
+
+        <Button
+          color="warning"
+          variant="outlined"
+          startIcon={<ReportProblemIcon />}
+          disabled={Boolean(game.reportadoPorUsuario)}
+          onClick={handleReportar}
+        >
+          {game.reportadoPorUsuario ? "Ya reportado" : "Reportar inapropiado"}
+        </Button>
 
         <Divider />
 
