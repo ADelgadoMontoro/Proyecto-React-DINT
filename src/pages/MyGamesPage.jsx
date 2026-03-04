@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Alert, Grid, Pagination, Stack, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { Alert, FormControl, Grid, InputLabel, MenuItem, Pagination, Select, Stack, Typography } from "@mui/material";
 import { getMisVideojuegosAPI } from "../apiService";
 import Loading from "../components/Loading";
 import GameCard from "../components/GameCard";
@@ -10,13 +10,14 @@ const MyGamesPage = () => {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
+  const [porPagina, setPorPagina] = useState(12);
 
-  const cargarMisJuegos = async (pagina = 1) => {
+  const cargarMisJuegos = useCallback(async (pagina = 1, limit = porPagina) => {
     setCargando(true);
     setError("");
 
     try {
-      const respuesta = await getMisVideojuegosAPI(pagina, 12);
+      const respuesta = await getMisVideojuegosAPI(pagina, limit);
       setMisJuegos(respuesta.data);
       setPaginaActual(respuesta.pagination.page);
       setTotalPaginas(respuesta.pagination.totalPages || 1);
@@ -25,11 +26,11 @@ const MyGamesPage = () => {
     } finally {
       setCargando(false);
     }
-  };
+  }, [porPagina]);
 
   useEffect(() => {
-    cargarMisJuegos(1);
-  }, []);
+    cargarMisJuegos(1, porPagina);
+  }, [cargarMisJuegos, porPagina]);
 
   if (cargando) return <Loading text="Cargando mis videojuegos..." />;
 
@@ -38,6 +39,21 @@ const MyGamesPage = () => {
       <Typography variant="h4" fontWeight={800}>
         Mis videojuegos
       </Typography>
+
+      <FormControl size="small" sx={{ width: 240 }}>
+        <InputLabel id="my-page-size">Videojuegos por pagina</InputLabel>
+        <Select
+          labelId="my-page-size"
+          label="Videojuegos por pagina"
+          value={porPagina}
+          onChange={(e) => setPorPagina(Number(e.target.value))}
+        >
+          <MenuItem value={6}>6</MenuItem>
+          <MenuItem value={12}>12</MenuItem>
+          <MenuItem value={18}>18</MenuItem>
+          <MenuItem value={24}>24</MenuItem>
+        </Select>
+      </FormControl>
 
       {error && <Alert severity="error">{error}</Alert>}
 
@@ -59,7 +75,7 @@ const MyGamesPage = () => {
             color="primary"
             page={paginaActual}
             count={totalPaginas}
-            onChange={(_, value) => cargarMisJuegos(value)}
+            onChange={(_, value) => cargarMisJuegos(value, porPagina)}
           />
         </Stack>
       )}
