@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Alert, Box, Button, Link, Paper, Stack, TextField, Typography } from "@mui/material";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { useAuth } from "../context/useAuth";
 
 const emptyForm = {
   username: "",
@@ -39,50 +41,41 @@ const RegisterPage = () => {
   };
 
   return (
-    <section className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit}>
-        <h2>Registro</h2>
+    <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center", p: 2 }}>
+      <Paper elevation={4} sx={{ p: 3, width: "100%", maxWidth: 420 }}>
+        <Stack component="form" spacing={2} onSubmit={handleSubmit}>
+          <Typography variant="h5" fontWeight={800}>
+            Registro
+          </Typography>
 
-        <input
-          name="username"
-          type="text"
-          placeholder="Usuario"
-          value={form.username}
-          onChange={parsearDatos}
-          required
-        />
+          <TextField name="username" label="Usuario" value={form.username} onChange={parsearDatos} required />
+          <TextField name="email" label="Email" type="email" value={form.email} onChange={parsearDatos} required />
+          <TextField
+            name="password"
+            label="Password (min 6)"
+            type="password"
+            value={form.password}
+            onChange={parsearDatos}
+            minLength={6}
+            required
+          />
 
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={parsearDatos}
-          required
-        />
+          {error && <Alert severity="error">{error}</Alert>}
+          {ok && <Alert severity="success">{ok}</Alert>}
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Password (min 6)"
-          value={form.password}
-          onChange={parsearDatos}
-          minLength={6}
-          required
-        />
+          <Button type="submit" variant="contained" startIcon={<PersonAddAlt1Icon />} disabled={loading}>
+            {loading ? "Creando..." : "Crear cuenta"}
+          </Button>
 
-        {error && <p className="error">{error}</p>}
-        {ok && <p className="ok">{ok}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Creando..." : "Crear cuenta"}
-        </button>
-
-        <p>
-          Ya tienes cuenta? <Link to="/login">Inicia sesion</Link>
-        </p>
-      </form>
-    </section>
+          <Typography variant="body2">
+            Ya tienes cuenta?{" "}
+            <Link component={RouterLink} to="/login" underline="hover">
+              Inicia sesion
+            </Link>
+          </Typography>
+        </Stack>
+      </Paper>
+    </Box>
   );
 };
 

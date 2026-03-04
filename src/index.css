@@ -2,8 +2,6 @@
 
 :root {
   font-family: "Manrope", "Segoe UI", sans-serif;
-  color: #17233c;
-  background: #f4f7fc;
 }
 
 * {
@@ -12,10 +10,4 @@
 
 body {
   margin: 0;
-  min-width: 320px;
-  background: radial-gradient(circle at 10% 0%, #ffffff, #f4f7fc 50%);
-}
-
-a {
-  text-decoration: none;
 }

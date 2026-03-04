@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Grid, Pagination, Stack, Typography } from "@mui/material";
 import { getVideojuegosAPI } from "../apiService";
 import Loading from "../components/Loading";
 import GameCard from "../components/GameCard";
@@ -23,32 +24,28 @@ const AllGamesPage = () => {
   if (loading) return <Loading text="Cargando videojuegos..." />;
 
   return (
-    <section>
-      <h2>Todos los videojuegos</h2>
+    <Stack spacing={2}>
+      <Typography variant="h4" fontWeight={800}>
+        Todos los videojuegos
+      </Typography>
 
-      <div className="grid-cards">
+      <Grid container spacing={2}>
         {games.map((game) => (
-          <GameCard key={game.id} game={game} />
+          <Grid key={game.id} size={{ xs: 12, sm: 6, md: 4 }}>
+            <GameCard game={game} />
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
-      <div className="pager">
-        <button disabled={pagination.page <= 1} onClick={() => loadData(pagination.page - 1)}>
-          Anterior
-        </button>
-
-        <span>
-          Pagina {pagination.page} de {pagination.totalPages}
-        </span>
-
-        <button
-          disabled={pagination.page >= pagination.totalPages}
-          onClick={() => loadData(pagination.page + 1)}
-        >
-          Siguiente
-        </button>
-      </div>
-    </section>
+      <Stack alignItems="center" pt={1}>
+        <Pagination
+          color="primary"
+          page={pagination.page}
+          count={pagination.totalPages || 1}
+          onChange={(_, value) => loadData(value)}
+        />
+      </Stack>
+    </Stack>
   );
 };
 

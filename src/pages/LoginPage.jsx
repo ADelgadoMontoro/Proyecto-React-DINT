@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Alert, Box, Button, Paper, Stack, TextField, Typography, Link } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+import { useAuth } from "../context/useAuth";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -26,37 +28,45 @@ const LoginPage = () => {
   };
 
   return (
-    <section className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit}>
-        <h2>Iniciar sesion</h2>
+    <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center", p: 2 }}>
+      <Paper elevation={4} sx={{ p: 3, width: "100%", maxWidth: 420 }}>
+        <Stack component="form" spacing={2} onSubmit={handleSubmit}>
+          <Typography variant="h5" fontWeight={800}>
+            Iniciar sesion
+          </Typography>
 
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+          <TextField
+            label="Usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            fullWidth
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+          />
 
-        {error && <p className="error">{error}</p>}
+          {error && <Alert severity="error">{error}</Alert>}
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
+          <Button type="submit" variant="contained" startIcon={<LoginIcon />} disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
+          </Button>
 
-        <p>
-          No tienes cuenta? <Link to="/register">Registrate</Link>
-        </p>
-      </form>
-    </section>
+          <Typography variant="body2">
+            No tienes cuenta?{" "}
+            <Link component={RouterLink} to="/register" underline="hover">
+              Registrate
+            </Link>
+          </Typography>
+        </Stack>
+      </Paper>
+    </Box>
   );
 };
 

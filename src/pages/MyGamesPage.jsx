@@ -1,54 +1,69 @@
 import { useEffect, useState } from "react";
+import { Alert, Grid, Pagination, Stack, Typography } from "@mui/material";
 import { getMisVideojuegosAPI } from "../apiService";
 import Loading from "../components/Loading";
 import GameCard from "../components/GameCard";
 
 const MyGamesPage = () => {
-  const [games, setGames] = useState([]);
-  const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
-  const [loading, setLoading] = useState(true);
+  const [misJuegos, setMisJuegos] = useState([]);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
 
-  const loadData = async (page = 1) => {
-    setLoading(true);
-    const data = await getMisVideojuegosAPI(page, 12);
-    setGames(data.data);
-    setPagination(data.pagination);
-    setLoading(false);
+  const cargarMisJuegos = async (pagina = 1) => {
+    setCargando(true);
+    setError("");
+
+    try {
+      const respuesta = await getMisVideojuegosAPI(pagina, 12);
+      setMisJuegos(respuesta.data);
+      setPaginaActual(respuesta.pagination.page);
+      setTotalPaginas(respuesta.pagination.totalPages || 1);
+    } catch (err) {
+      setError(err.response?.data?.message || "No se pudieron cargar tus videojuegos");
+    } finally {
+      setCargando(false);
+    }
   };
 
   useEffect(() => {
-    loadData(1);
+    cargarMisJuegos(1);
   }, []);
 
-  if (loading) return <Loading text="Cargando mis videojuegos..." />;
+  if (cargando) return <Loading text="Cargando mis videojuegos..." />;
 
   return (
-    <section>
-      <h2>Mis videojuegos</h2>
+    <Stack spacing={2}>
+      <Typography variant="h4" fontWeight={800}>
+        Mis videojuegos
+      </Typography>
 
-      <div className="grid-cards">
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
+      {error && <Alert severity="error">{error}</Alert>}
+
+      {!error && misJuegos.length === 0 && (
+        <Alert severity="info">Aun no has creado videojuegos.</Alert>
+      )}
+
+      <Grid container spacing={2}>
+        {misJuegos.map((game) => (
+          <Grid key={game.id} size={{ xs: 12, sm: 6, md: 4 }}>
+            <GameCard game={game} />
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
-      <div className="pager">
-        <button disabled={pagination.page <= 1} onClick={() => loadData(pagination.page - 1)}>
-          Anterior
-        </button>
-
-        <span>
-          Pagina {pagination.page} de {pagination.totalPages}
-        </span>
-
-        <button
-          disabled={pagination.page >= pagination.totalPages}
-          onClick={() => loadData(pagination.page + 1)}
-        >
-          Siguiente
-        </button>
-      </div>
-    </section>
+      {totalPaginas > 1 && (
+        <Stack alignItems="center" pt={1}>
+          <Pagination
+            color="primary"
+            page={paginaActual}
+            count={totalPaginas}
+            onChange={(_, value) => cargarMisJuegos(value)}
+          />
+        </Stack>
+      )}
+    </Stack>
   );
 };
 

@@ -4,7 +4,7 @@ Aplicacion completa con frontend en React y backend propio con autenticacion JWT
 
 ## Stack elegido (y por que)
 
-- Frontend: React + Vite + React Router + Axios.
+- Frontend: React + Vite + React Router + Axios + Material UI.
 - Backend: Node.js + Express.
 - Persistencia: almacenamiento persistente en JSON (`backend/data/db.json`).
 - Auth: JWT + `bcryptjs` para hash de contraseñas.
@@ -14,6 +14,24 @@ Justificacion corta:
 - Es un stack rapido de montar para una V2 de clase.
 - Mantiene codigo simple para alguien que esta aprendiendo.
 - Permite cubrir JWT, roles, rutas protegidas y CRUD completo sin complejidad extra.
+
+## Refactor UI (Material UI)
+
+He elegido **Material UI (MUI)** y los componentes que voy a refactorizar manualmente son:
+
+1. `src/components/Layout.jsx`
+- Cambiar la cabecera a componentes MUI (`AppBar`, `Toolbar`, `Button`, `Chip`, `Container`).
+- Mantener la navegacion con `react-router-dom` usando botones/enlaces de MUI.
+
+2. `src/pages/LoginPage.jsx`
+- Refactorizar el formulario con `Paper`, `Stack`, `TextField`, `Button`, `Alert`.
+- Mejorar la presentacion de estados de carga y error en el login.
+
+3. `src/pages/NewGamePage.jsx`
+- Rehacer el alta con `Paper`, `Grid`, `TextField`, `Button`, `Alert`.
+- Mejorar distribucion y legibilidad del formulario en desktop y movil.
+
+El resto de componentes los adapta la IA.
 
 ## Estructura
 

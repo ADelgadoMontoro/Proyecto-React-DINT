@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteVideojuegoAPI, getVideojuegoByIdAPI } from "../apiService";
+import {
+  Alert,
+  Button,
+  Chip,
+  Link,
+  Paper,
+  Stack,
+  Typography,
+  Box
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Loading from "../components/Loading";
-import { useAuth } from "../context/AuthContext";
+import { deleteVideojuegoAPI, getVideojuegoByIdAPI } from "../apiService";
+import { useAuth } from "../context/useAuth";
 
 const GameDetailPage = () => {
   const { id } = useParams();
@@ -42,39 +53,57 @@ const GameDetailPage = () => {
   };
 
   if (loading) return <Loading text="Cargando detalle..." />;
-  if (error) return <p className="error">{error}</p>;
+  if (error) return <Alert severity="error">{error}</Alert>;
   if (!game) return null;
 
   const canDelete = user?.role === "admin" || Number(game.userId) === Number(user?.id);
 
   return (
-    <section className="detail-page">
-      <h2>{game.nombre}</h2>
+    <Paper elevation={2} sx={{ p: { xs: 2, md: 3 } }}>
+      <Stack spacing={2}>
+        <Typography variant="h4" fontWeight={800}>
+          {game.nombre}
+        </Typography>
 
-      <img src={game.urlImagen || "https://picsum.photos/seed/fallbackdetail/800/450"} alt={game.nombre} />
+        <Box
+          component="img"
+          src={game.urlImagen || "https://picsum.photos/seed/fallbackdetail/800/450"}
+          alt={game.nombre}
+          sx={{ width: "100%", maxHeight: 360, objectFit: "cover", borderRadius: 2 }}
+        />
 
-      <p><strong>Usuario:</strong> {game.usuario}</p>
-      <p><strong>Descripcion:</strong> {game.descripcion}</p>
-      <p><strong>Fecha lanzamiento:</strong> {game.fechaLanzamiento || "-"}</p>
-      <p><strong>Compañia:</strong> {game.compania || "-"}</p>
-      <p><strong>Plataformas:</strong> {game.plataformas?.join(", ") || "-"}</p>
-      <p><strong>Categorias:</strong> {game.categorias?.join(", ") || "-"}</p>
-      <p><strong>Precio:</strong> {game.precio} €</p>
+        <Typography><strong>Usuario:</strong> {game.usuario}</Typography>
+        <Typography><strong>Descripcion:</strong> {game.descripcion}</Typography>
+        <Typography><strong>Fecha lanzamiento:</strong> {game.fechaLanzamiento || "-"}</Typography>
+        <Typography><strong>Compañia:</strong> {game.compania || "-"}</Typography>
 
-      {game.urlVideo && (
-        <p>
-          <a href={game.urlVideo} target="_blank" rel="noreferrer">
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          {(game.plataformas || []).map((p) => (
+            <Chip key={p} label={p} color="info" variant="outlined" />
+          ))}
+        </Stack>
+
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          {(game.categorias || []).map((c) => (
+            <Chip key={c} label={c} color="secondary" variant="outlined" />
+          ))}
+        </Stack>
+
+        <Typography><strong>Precio:</strong> {game.precio} €</Typography>
+
+        {game.urlVideo && (
+          <Link href={game.urlVideo} target="_blank" rel="noreferrer" underline="hover">
             Ver trailer
-          </a>
-        </p>
-      )}
+          </Link>
+        )}
 
-      {canDelete && (
-        <button className="danger" onClick={handleDelete}>
-          Eliminar
-        </button>
-      )}
-    </section>
+        {canDelete && (
+          <Button color="error" variant="contained" startIcon={<DeleteIcon />} onClick={handleDelete}>
+            Eliminar
+          </Button>
+        )}
+      </Stack>
+    </Paper>
   );
 };
 

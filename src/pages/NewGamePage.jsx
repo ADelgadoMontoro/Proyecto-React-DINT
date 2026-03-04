@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Alert,
+  Button,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
 import { addVideojuegoAPI } from "../apiService";
 
 const emptyForm = {
@@ -55,58 +65,112 @@ const NewGamePage = () => {
   };
 
   return (
-    <section>
-      <h2>Alta de videojuego</h2>
+    <Paper elevation={2} sx={{ p: { xs: 2, md: 3 } }}>
+      <Stack spacing={2} component="form" onSubmit={handleSubmit}>
+        <Typography variant="h4" fontWeight={800}>
+          Alta de videojuego
+        </Typography>
 
-      <form className="game-form" onSubmit={handleSubmit}>
-        <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={parsearDatos} required />
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField name="nombre" label="Nombre" value={form.nombre} onChange={parsearDatos} required fullWidth />
+          </Grid>
 
-        <textarea
-          name="descripcion"
-          placeholder="Descripcion"
-          value={form.descripcion}
-          onChange={parsearDatos}
-          required
-        />
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              name="compania"
+              label="Compañia"
+              value={form.compania}
+              onChange={parsearDatos}
+              fullWidth
+            />
+          </Grid>
 
-        <input name="fechaLanzamiento" type="date" value={form.fechaLanzamiento} onChange={parsearDatos} />
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              name="descripcion"
+              label="Descripcion"
+              value={form.descripcion}
+              onChange={parsearDatos}
+              multiline
+              minRows={3}
+              required
+              fullWidth
+            />
+          </Grid>
 
-        <input name="compania" placeholder="Compañia" value={form.compania} onChange={parsearDatos} />
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              name="fechaLanzamiento"
+              label="Fecha lanzamiento"
+              type="date"
+              value={form.fechaLanzamiento}
+              onChange={parsearDatos}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+            />
+          </Grid>
 
-        <input
-          name="plataformas"
-          placeholder="Plataformas separadas por coma (PC, PS5...)"
-          value={form.plataformas}
-          onChange={parsearDatos}
-        />
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              name="precio"
+              label="Precio"
+              type="number"
+              inputProps={{ step: "0.01" }}
+              value={form.precio}
+              onChange={parsearDatos}
+              fullWidth
+            />
+          </Grid>
 
-        <input
-          name="categorias"
-          placeholder="Categorias separadas por coma (Rol, Shooter...)"
-          value={form.categorias}
-          onChange={parsearDatos}
-        />
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              name="plataformas"
+              label="Plataformas (PC, PS5...)"
+              value={form.plataformas}
+              onChange={parsearDatos}
+              fullWidth
+            />
+          </Grid>
 
-        <input
-          name="precio"
-          type="number"
-          step="0.01"
-          placeholder="Precio"
-          value={form.precio}
-          onChange={parsearDatos}
-        />
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              name="categorias"
+              label="Categorias (Rol, Shooter...)"
+              value={form.categorias}
+              onChange={parsearDatos}
+              fullWidth
+            />
+          </Grid>
 
-        <input name="urlImagen" placeholder="URL imagen" value={form.urlImagen} onChange={parsearDatos} />
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              name="urlImagen"
+              label="URL imagen"
+              value={form.urlImagen}
+              onChange={parsearDatos}
+              fullWidth
+            />
+          </Grid>
 
-        <input name="urlVideo" placeholder="URL video" value={form.urlVideo} onChange={parsearDatos} />
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              name="urlVideo"
+              label="URL video"
+              value={form.urlVideo}
+              onChange={parsearDatos}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
 
-        {error && <p className="error">{error}</p>}
+        {error && <Alert severity="error">{error}</Alert>}
 
-        <button type="submit" disabled={loading}>
+        <Button type="submit" variant="contained" startIcon={<SaveIcon />} disabled={loading}>
           {loading ? "Guardando..." : "Crear videojuego"}
-        </button>
-      </form>
-    </section>
+        </Button>
+      </Stack>
+    </Paper>
   );
 };
 

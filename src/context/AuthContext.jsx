@@ -1,8 +1,6 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { loginAPI, registerAPI } from "../apiService";
-
-const AuthContext = createContext(null);
+import { AuthContext } from "./authContextObject";
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState("");
@@ -14,8 +12,16 @@ export const AuthProvider = ({ children }) => {
     const userGuardado = localStorage.getItem("user");
 
     if (tokenGuardado && userGuardado) {
-      setToken(tokenGuardado);
-      setUser(JSON.parse(userGuardado));
+      try {
+        const userParseado = JSON.parse(userGuardado);
+        setToken(tokenGuardado);
+        setUser(userParseado);
+      } catch {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setToken("");
+        setUser(null);
+      }
     }
 
     setLoadingAuth(false);
@@ -62,5 +68,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

@@ -1,5 +1,15 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Stack,
+  Toolbar,
+  Typography,
+  Chip
+} from "@mui/material";
+import { useAuth } from "../context/useAuth";
 
 const Layout = () => {
   const { user, logout } = useAuth();
@@ -11,28 +21,42 @@ const Layout = () => {
   };
 
   return (
-    <div className="page-shell">
-      <header className="topbar">
-        <h1>Videojuegos V2</h1>
+    <Box>
+      <AppBar position="sticky" elevation={1}>
+        <Toolbar sx={{ gap: 2, flexWrap: "wrap", py: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, mr: 2 }}>
+            Videojuegos V2
+          </Typography>
 
-        <nav>
-          <Link to="/videojuegos">Todos</Link>
-          <Link to="/mis-videojuegos">Mis videojuegos</Link>
-          <Link to="/videojuegos/nuevo">Nuevo</Link>
-        </nav>
+          <Stack direction="row" spacing={1} sx={{ flexGrow: 1, flexWrap: "wrap" }}>
+            <Button component={RouterLink} to="/videojuegos" variant="contained" color="secondary">
+              Todos
+            </Button>
+            <Button component={RouterLink} to="/mis-videojuegos" variant="contained" color="secondary">
+              Mis videojuegos
+            </Button>
+            <Button component={RouterLink} to="/videojuegos/nuevo" variant="contained" color="secondary">
+              Nuevo
+            </Button>
+          </Stack>
 
-        <div className="topbar-right">
-          <span>
-            {user?.username} ({user?.role})
-          </span>
-          <button onClick={handleLogout}>Salir</button>
-        </div>
-      </header>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Chip
+              label={`${user?.username || ""} (${user?.role || ""})`}
+              color="default"
+              sx={{ bgcolor: "white" }}
+            />
+            <Button onClick={handleLogout} variant="outlined" sx={{ color: "white", borderColor: "white" }}>
+              Salir
+            </Button>
+          </Stack>
+        </Toolbar>
+      </AppBar>
 
-      <main>
+      <Container maxWidth="lg" sx={{ py: 3 }}>
         <Outlet />
-      </main>
-    </div>
+      </Container>
+    </Box>
   );
 };
 
