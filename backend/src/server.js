@@ -11,6 +11,8 @@ const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.BACKEND_PORT) || 8787;
 const JWT_SECRET = process.env.JWT_SECRET || "dev_super_secret_change_me";
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "http://localhost:11434";
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "lfm2.5-thinking:1.2b";
 const DB_PATH = path.join(__dirname, "..", "data", "db.json");
 
 const app = express();
@@ -82,6 +84,36 @@ const buildPaginated = (items, page, limit) => {
       totalPages
     }
   };
+};
+
+const buildGamesContext = (videojuegos) => {
+  if (!Array.isArray(videojuegos) || videojuegos.length === 0) {
+    return "No hay videojuegos en la base de datos.";
+  }
+
+  return videojuegos
+    .map((game) => {
+      const categorias = Array.isArray(game.categorias) && game.categorias.length > 0
+        ? game.categorias.join(", ")
+        : "sin categorias";
+      const plataformas = Array.isArray(game.plataformas) && game.plataformas.length > 0
+        ? game.plataformas.join(", ")
+        : "sin plataformas";
+      const descripcion = String(game.descripcion || "").slice(0, 180);
+
+      return [
+        `ID: ${game.id}`,
+        `Nombre: ${game.nombre || "-"}`,
+        `Usuario: ${game.usuario || "-"}`,
+        `Compania: ${game.compania || "-"}`,
+        `Categorias: ${categorias}`,
+        `Plataformas: ${plataformas}`,
+        `Precio: ${game.precio || 0} EUR`,
+        `Popularidad: ${game.popularidad || 0}`,
+        `Descripcion: ${descripcion}`
+      ].join(" | ");
+    })
+    .join("\n");
 };
 
 const enrichGame = (game, users, currentUserId = null) => {
@@ -484,6 +516,73 @@ app.delete("/videojuegos/:id", authRequired, (req, res) => {
   writeDb(db);
 
   return res.json({ message: "Videojuego eliminado" });
+});
+
+app.post("/assistant/chat", authRequired, async (req, res) => {
+  const message = String(req.body?.message || "").trim();
+
+  if (!message) {
+    return res.status(400).json({ message: "message es obligatorio" });
+  }
+
+  if (message.length > 1200) {
+    return res.status(400).json({ message: "El mensaje es demasiado largo" });
+  }
+
+  const db = readDb();
+  const videojuegos = db.videojuegos
+    .map((v) => enrichGame(v, db.users, req.user.sub))
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+
+  const gamesContext = buildGamesContext(videojuegos);
+  const systemPrompt = [
+    "Eres un asistente de videojuegos para esta aplicacion.",
+    "Reglas obligatorias:",
+    "- Solo puedes responder usando los videojuegos de la base de datos dada.",
+    "- Si te preguntan por un juego que no esta en la base de datos, dilo claramente y no inventes datos.",
+    "- Puedes recomendar juegos comparando categoria, plataformas, precio y popularidad.",
+    "- Responde en espanol, claro y breve.",
+    "",
+    "Base de datos actual:",
+    gamesContext
+  ].join("\n");
+
+  try {
+    const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        options: {
+          temperature: 0.2
+        },
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      return res.status(502).json({
+        message: "No se pudo obtener respuesta del asistente IA",
+        details: text.slice(0, 400)
+      });
+    }
+
+    const data = await response.json();
+    const reply = data?.message?.content;
+
+    if (!reply) {
+      return res.status(502).json({ message: "Respuesta vacia del asistente IA" });
+    }
+
+    return res.json({ reply });
+  } catch (_) {
+    return res.status(502).json({ message: "Error conectando con Ollama" });
+  }
 });
 
 ensureDb();

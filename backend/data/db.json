@@ -220,7 +220,14 @@
       "urlImagen": "https://picsum.photos/seed/luis_sekiro/800/450",
       "urlVideo": "https://www.youtube.com/watch?v=rXMX4YJ7Lks",
       "userId": 3,
-      "createdAt": "2026-03-04T00:09:00Z"
+      "createdAt": "2026-03-04T00:09:00Z",
+      "votos": [
+        {
+          "userId": 1,
+          "tipo": "dislike",
+          "createdAt": "2026-03-04T14:19:13.365Z"
+        }
+      ]
     },
     {
       "id": 10,
@@ -242,7 +249,14 @@
       "urlImagen": "https://picsum.photos/seed/luis_sts/800/450",
       "urlVideo": "https://www.youtube.com/watch?v=9SZUtyYSOjQ",
       "userId": 3,
-      "createdAt": "2026-03-04T00:10:00Z"
+      "createdAt": "2026-03-04T00:10:00Z",
+      "votos": [
+        {
+          "userId": 1,
+          "tipo": "dislike",
+          "createdAt": "2026-03-04T14:19:08.936Z"
+        }
+      ]
     },
     {
       "id": 11,
@@ -264,7 +278,14 @@
       "urlImagen": "https://picsum.photos/seed/luis_cs/800/450",
       "urlVideo": "https://www.youtube.com/watch?v=CpWe03NhXKs",
       "userId": 3,
-      "createdAt": "2026-03-04T00:11:00Z"
+      "createdAt": "2026-03-04T00:11:00Z",
+      "votos": [
+        {
+          "userId": 1,
+          "tipo": "dislike",
+          "createdAt": "2026-03-04T14:19:11.279Z"
+        }
+      ]
     },
     {
       "id": 12,
@@ -374,7 +395,14 @@
       "urlImagen": "https://picsum.photos/seed/motogp19/800/450",
       "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
       "userId": 4,
-      "createdAt": "2026-03-04T01:02:00Z"
+      "createdAt": "2026-03-04T01:02:00Z",
+      "votos": [
+        {
+          "userId": 1,
+          "tipo": "like",
+          "createdAt": "2026-03-04T14:19:02.591Z"
+        }
+      ]
     },
     {
       "id": 17,
@@ -440,7 +468,15 @@
       "urlImagen": "https://picsum.photos/seed/motogp22/800/450",
       "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
       "userId": 4,
-      "createdAt": "2026-03-04T01:05:00Z"
+      "createdAt": "2026-03-04T01:05:00Z",
+      "reportes": [
+        {
+          "userId": 2,
+          "usuario": "Adrian",
+          "motivo": "",
+          "createdAt": "2026-03-04T14:07:58.768Z"
+        }
+      ]
     },
     {
       "id": 20,
@@ -462,7 +498,14 @@
       "urlImagen": "https://picsum.photos/seed/motogp23/800/450",
       "urlVideo": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
       "userId": 4,
-      "createdAt": "2026-03-04T01:06:00Z"
+      "createdAt": "2026-03-04T01:06:00Z",
+      "votos": [
+        {
+          "userId": 1,
+          "tipo": "like",
+          "createdAt": "2026-03-04T14:19:00.496Z"
+        }
+      ]
     }
   ]
 }

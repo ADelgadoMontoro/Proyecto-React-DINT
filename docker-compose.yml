@@ -1,4 +1,15 @@
 services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_URL: http://localhost:8787
+    container_name: videojuegos-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
   backend:
     build:
       context: ./backend
@@ -8,5 +19,20 @@ services:
     environment:
       - BACKEND_PORT=8787
       - JWT_SECRET=change_this_secret_in_production
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=lfm2.5-thinking:1.2b
     volumes:
       - ./backend/data:/app/data
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: videojuegos-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  ollama_data:

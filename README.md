@@ -1,4 +1,4 @@
-# Proyecto React - Videojuegos V2 (JWT + CRUD)
+# Proyecto React - Videojuegos V2 (JWT + CRUD + Asistente IA)
 
 Aplicacion completa con frontend en React y backend propio con autenticacion JWT y roles (`user`, `admin`).
 
@@ -8,7 +8,8 @@ Aplicacion completa con frontend en React y backend propio con autenticacion JWT
 - Backend: Node.js + Express.
 - Persistencia: almacenamiento persistente en JSON (`backend/data/db.json`).
 - Auth: JWT + `bcryptjs` para hash de contraseñas.
-- Docker: `Dockerfile` para backend y `docker-compose.yml` para levantarlo con volumen persistente.
+- IA local: Ollama con modelo `lfm2.5-thinking:1.2b`.
+- Docker: frontend + backend + ollama con `docker-compose`.
 
 Justificacion corta:
 - Es un stack rapido de montar para una V2 de clase.
@@ -35,12 +36,12 @@ El resto de componentes los adapta la IA.
 
 ## Estructura
 
-- `src/`: frontend React (manual)
-- `backend/`: API JWT + CRUD
+- `src/`: frontend React
+- `backend/`: API JWT + CRUD + endpoint de asistente IA
 - `backend/data/db.json`: datos persistentes de usuarios y videojuegos
-- `docker-compose.yml`: arranque del backend dockerizado
+- `docker-compose.yml`: arranque de frontend, backend y ollama
 
-## Instalacion
+## Instalacion local
 
 ### Frontend
 
@@ -71,6 +72,8 @@ Copia `backend/.env.example` a `backend/.env` (si lo usas en tu entorno):
 ```env
 BACKEND_PORT=8787
 JWT_SECRET=change_this_secret_in_production
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=lfm2.5-thinking:1.2b
 ```
 
 ## Ejecucion local
@@ -127,25 +130,72 @@ Base URL: `http://localhost:8787`
   - Devuelve videojuegos del usuario autenticado.
 - `GET /videojuegos/:id`
 - `POST /videojuegos`
-  - body ejemplo:
-    ```json
-    {
-      "nombre": "Hollow Knight",
-      "descripcion": "Metroidvania 2D",
-      "fechaLanzamiento": "2017-02-24",
-      "compania": "Team Cherry",
-      "plataformas": ["PC", "Switch"],
-      "categorias": ["Plataformas", "Aventura"],
-      "precio": 14.99,
-      "urlImagen": "https://...",
-      "urlVideo": "https://..."
-    }
-    ```
 - `DELETE /videojuegos/:id`
   - `user`: solo elimina los suyos.
   - `admin`: puede eliminar cualquiera.
 
-## Frontend implementado (manual)
+### IA (protegido)
+
+- `POST /assistant/chat`
+  - body:
+    ```json
+    { "message": "Recomiendame un juego de motos para PC" }
+    ```
+  - response:
+    ```json
+    { "reply": "..." }
+    ```
+
+## Asistente IA (frontend)
+
+- Aparece con un boton flotante abajo a la derecha.
+- Al abrirlo, muestra un chat simple para preguntar por videojuegos.
+- Usa el endpoint `/assistant/chat` del backend.
+
+Instrucciones de comportamiento definidas en backend:
+- Solo responder con videojuegos que existan en la base de datos actual.
+- No inventar juegos ni datos fuera de esa base.
+- Si la pregunta no aplica a los juegos guardados, responderlo claramente.
+- Puede recomendar comparando categoria, plataforma, precio y popularidad.
+
+## Docker
+
+### Levantar todo
+
+```bash
+docker compose up --build -d
+```
+
+Servicios:
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8787`
+- Ollama: `http://localhost:11434`
+
+### Pull del modelo en contenedor Ollama
+
+```bash
+docker compose exec ollama ollama pull lfm2.5-thinking:1.2b
+```
+
+### Prueba rapida del modelo dentro del contenedor
+
+```bash
+docker compose exec ollama ollama run lfm2.5-thinking:1.2b "Di hola en una frase"
+```
+
+### Prueba del endpoint IA del backend
+
+1. Inicia sesion y consigue un token.
+2. Lanza:
+
+```bash
+curl -X POST http://localhost:8787/assistant/chat \
+  -H "Authorization: Bearer TU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Recomiendame un juego barato de aventura"}'
+```
+
+## Frontend implementado
 
 - `/login` (publica)
 - `/register` (publica)
@@ -153,22 +203,13 @@ Base URL: `http://localhost:8787`
 - `/mis-videojuegos` (protegida)
 - `/videojuegos/nuevo` (protegida)
 - `/videojuegos/:id` (protegida)
+- `/admin/reportados` (protegida, solo admin)
 
 Incluye:
 - `AuthContext` para sesion (`token`, `user`, `login`, `logout`).
 - Redireccion automatica a `/login` sin sesion.
 - Componente de carga `Loading` durante peticiones.
 - Uso de `axios` en lugar de `fetch`.
-
-## Docker
-
-### Backend dockerizado
-
-```bash
-docker compose up --build
-```
-
-Esto levanta el backend en `http://localhost:8787` con volumen persistente en `backend/data`.
 
 ## Comprobaciones
 

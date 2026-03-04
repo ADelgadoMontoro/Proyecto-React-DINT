@@ -92,3 +92,8 @@ export const deleteReportadoAPI = async (videojuegoId) => {
   const response = await axios.delete(`${API_URL}/admin/reportados/${videojuegoId}`, getAuthHeaders());
   return response.data;
 };
+
+export const askAssistantAPI = async (message) => {
+  const response = await axios.post(`${API_URL}/assistant/chat`, { message }, getAuthHeaders());
+  return response.data;
+};

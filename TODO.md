@@ -89,3 +89,14 @@
 - [x] Añadir scripts/comandos de arranque para entorno local y Docker.
 - [x] Probar flujo completo V2: registro, login, CRUD, permisos por rol y paginacion.
 - [x] Actualizar `README.md` con guia de V2 (arranque local, variables, Docker y rutas).
+
+## 13) V3 - Asistente IA con Ollama
+- [x] Dockerizar el frontend.
+- [x] Crear contenedor de Ollama en `docker-compose`.
+- [x] Configurar el modelo `lfm2.5-thinking:1.2b` por entorno (`OLLAMA_MODEL`).
+- [x] Documentar como hacer pull del modelo en el contenedor y probarlo.
+- [x] Implementar endpoint protegido en backend para chat con IA (`POST /assistant/chat`).
+- [x] Definir instrucciones del asistente para responder solo con juegos de la base de datos actual.
+- [x] Implementar boton flotante en la esquina inferior derecha del frontend.
+- [x] Implementar panel de chat para buscar y recomendar videojuegos.
+- [x] Documentar el flujo completo en `README.md`.

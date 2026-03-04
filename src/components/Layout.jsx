@@ -10,6 +10,7 @@ import {
   Chip
 } from "@mui/material";
 import { useAuth } from "../context/useAuth";
+import AiAssistant from "./AiAssistant";
 
 const Layout = () => {
   const { user, logout } = useAuth();
@@ -61,6 +62,8 @@ const Layout = () => {
       <Container maxWidth="lg" sx={{ py: 3 }}>
         <Outlet />
       </Container>
+
+      <AiAssistant />
     </Box>
   );
 };
