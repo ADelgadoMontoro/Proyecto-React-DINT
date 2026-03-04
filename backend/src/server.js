@@ -348,6 +348,43 @@ app.post("/videojuegos/:id/comentarios", authRequired, (req, res) => {
   });
 });
 
+app.delete("/videojuegos/:id/comentarios/:comentarioId", authRequired, (req, res) => {
+  const db = readDb();
+  const game = db.videojuegos.find((v) => Number(v.id) === Number(req.params.id));
+
+  if (!game) {
+    return res.status(404).json({ message: "Videojuego no encontrado" });
+  }
+
+  if (!Array.isArray(game.comentarios)) {
+    game.comentarios = [];
+  }
+
+  const comentarioIndex = game.comentarios.findIndex((c) => Number(c.id) === Number(req.params.comentarioId));
+  if (comentarioIndex === -1) {
+    return res.status(404).json({ message: "Comentario no encontrado" });
+  }
+
+  const comentario = game.comentarios[comentarioIndex];
+  const esAdmin = req.user.role === "admin";
+  const esPropietario = Number(comentario.userId) === Number(req.user.sub);
+  const tieneRespuestas = Array.isArray(comentario.respuestas) && comentario.respuestas.length > 0;
+
+  if (!esAdmin) {
+    if (!esPropietario) {
+      return res.status(403).json({ message: "No puedes eliminar comentarios de otros usuarios" });
+    }
+    if (tieneRespuestas) {
+      return res.status(403).json({ message: "No puedes eliminar un comentario con respuestas" });
+    }
+  }
+
+  game.comentarios.splice(comentarioIndex, 1);
+  writeDb(db);
+
+  return res.json({ message: "Comentario eliminado" });
+});
+
 app.delete("/videojuegos/:id", authRequired, (req, res) => {
   const db = readDb();
   const index = db.videojuegos.findIndex((v) => Number(v.id) === Number(req.params.id));

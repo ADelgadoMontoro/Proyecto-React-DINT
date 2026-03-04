@@ -65,3 +65,11 @@ export const addComentarioAPI = async (videojuegoId, texto) => {
   );
   return response.data;
 };
+
+export const deleteComentarioAPI = async (videojuegoId, comentarioId) => {
+  const response = await axios.delete(
+    `${API_URL}/videojuegos/${videojuegoId}/comentarios/${comentarioId}`,
+    getAuthHeaders()
+  );
+  return response.data;
+};

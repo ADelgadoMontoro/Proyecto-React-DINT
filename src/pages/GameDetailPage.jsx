@@ -5,8 +5,10 @@ import {
   Button,
   Chip,
   Divider,
+  IconButton,
   List,
   ListItem,
+  ListItemSecondaryAction,
   ListItemText,
   Link,
   Paper,
@@ -17,7 +19,12 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loading from "../components/Loading";
-import { addComentarioAPI, deleteVideojuegoAPI, getVideojuegoByIdAPI } from "../apiService";
+import {
+  addComentarioAPI,
+  deleteComentarioAPI,
+  deleteVideojuegoAPI,
+  getVideojuegoByIdAPI
+} from "../apiService";
 import { useAuth } from "../context/useAuth";
 
 const GameDetailPage = () => {
@@ -73,6 +80,23 @@ const GameDetailPage = () => {
       alert(err.response?.data?.message || "No se pudo guardar el comentario");
     } finally {
       setGuardandoComentario(false);
+    }
+  };
+
+  const canDeleteComentario = (comentarioItem) => {
+    if (user?.role === "admin") return true;
+    const esMio = Number(comentarioItem.userId) === Number(user?.id);
+    const tieneRespuestas = Array.isArray(comentarioItem.respuestas) && comentarioItem.respuestas.length > 0;
+    return esMio && !tieneRespuestas;
+  };
+
+  const handleDeleteComentario = async (comentarioId) => {
+    try {
+      await deleteComentarioAPI(id, comentarioId);
+      const data = await getVideojuegoByIdAPI(id);
+      setGame(data);
+    } catch (err) {
+      alert(err.response?.data?.message || "No se pudo eliminar el comentario");
     }
   };
 
@@ -146,6 +170,13 @@ const GameDetailPage = () => {
                   primary={`${c.usuario} · ${new Date(c.createdAt).toLocaleString()}`}
                   secondary={c.texto}
                 />
+                {canDeleteComentario(c) && (
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" color="error" onClick={() => handleDeleteComentario(c.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
             ))}
           </List>
