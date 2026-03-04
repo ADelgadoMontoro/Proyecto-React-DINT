@@ -51,6 +51,12 @@ const nextId = (items) => {
   return Math.max(...items.map((item) => Number(item.id))) + 1;
 };
 
+const nextCommentId = (videojuegos) => {
+  const ids = videojuegos.flatMap((g) => (Array.isArray(g.comentarios) ? g.comentarios.map((c) => Number(c.id)) : []));
+  if (!ids.length) return 1;
+  return Math.max(...ids) + 1;
+};
+
 const cleanUser = (user) => ({
   id: user.id,
   username: user.username,
@@ -85,13 +91,25 @@ const enrichGame = (game, users, currentUserId = null) => {
   const dislikes = votos.filter((v) => v.tipo === "dislike").length;
   const votoUsuario = votos.find((v) => Number(v.userId) === Number(currentUserId))?.tipo || null;
 
+  const comentarios = Array.isArray(game.comentarios)
+    ? game.comentarios.map((c) => {
+        const autor = users.find((u) => Number(u.id) === Number(c.userId));
+        return {
+          ...c,
+          usuario: c.usuario || (autor ? autor.username : "desconocido"),
+          respuestas: Array.isArray(c.respuestas) ? c.respuestas : []
+        };
+      })
+    : [];
+
   return {
     ...game,
     usuario: owner ? owner.username : "desconocido",
     likes,
     dislikes,
     popularidad: likes - dislikes,
-    votoUsuario
+    votoUsuario,
+    comentarios
   };
 };
 
@@ -248,6 +266,7 @@ app.post("/videojuegos", authRequired, (req, res) => {
     urlImagen: urlImagen || "",
     urlVideo: urlVideo || "",
     votos: [],
+    comentarios: [],
     userId: req.user.sub,
     createdAt: new Date().toISOString()
   };
@@ -291,6 +310,41 @@ app.post("/videojuegos/:id/votar", authRequired, (req, res) => {
   return res.json({
     message: "Voto registrado",
     game: enrichGame(game, db.users, req.user.sub)
+  });
+});
+
+app.post("/videojuegos/:id/comentarios", authRequired, (req, res) => {
+  const { texto } = req.body;
+  if (!texto || String(texto).trim() === "") {
+    return res.status(400).json({ message: "El comentario no puede estar vacio" });
+  }
+
+  const db = readDb();
+  const game = db.videojuegos.find((v) => Number(v.id) === Number(req.params.id));
+
+  if (!game) {
+    return res.status(404).json({ message: "Videojuego no encontrado" });
+  }
+
+  if (!Array.isArray(game.comentarios)) {
+    game.comentarios = [];
+  }
+
+  const nuevoComentario = {
+    id: nextCommentId(db.videojuegos),
+    userId: req.user.sub,
+    usuario: req.user.username,
+    texto: String(texto).trim(),
+    respuestas: [],
+    createdAt: new Date().toISOString()
+  };
+
+  game.comentarios.push(nuevoComentario);
+  writeDb(db);
+
+  return res.status(201).json({
+    message: "Comentario añadido",
+    comentario: nuevoComentario
   });
 });
 

@@ -56,3 +56,12 @@ export const votarVideojuegoAPI = async (id, tipo) => {
   const response = await axios.post(`${API_URL}/videojuegos/${id}/votar`, { tipo }, getAuthHeaders());
   return response.data;
 };
+
+export const addComentarioAPI = async (videojuegoId, texto) => {
+  const response = await axios.post(
+    `${API_URL}/videojuegos/${videojuegoId}/comentarios`,
+    { texto },
+    getAuthHeaders()
+  );
+  return response.data;
+};

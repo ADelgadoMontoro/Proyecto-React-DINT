@@ -4,15 +4,20 @@ import {
   Alert,
   Button,
   Chip,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
   Link,
   Paper,
   Stack,
+  TextField,
   Typography,
   Box
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loading from "../components/Loading";
-import { deleteVideojuegoAPI, getVideojuegoByIdAPI } from "../apiService";
+import { addComentarioAPI, deleteVideojuegoAPI, getVideojuegoByIdAPI } from "../apiService";
 import { useAuth } from "../context/useAuth";
 
 const GameDetailPage = () => {
@@ -22,6 +27,8 @@ const GameDetailPage = () => {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [comentario, setComentario] = useState("");
+  const [guardandoComentario, setGuardandoComentario] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -49,6 +56,23 @@ const GameDetailPage = () => {
       navigate("/videojuegos");
     } catch (err) {
       alert(err.response?.data?.message || "No se pudo eliminar");
+    }
+  };
+
+  const handleAddComentario = async (e) => {
+    e.preventDefault();
+    if (!comentario.trim()) return;
+
+    setGuardandoComentario(true);
+    try {
+      await addComentarioAPI(id, comentario);
+      const data = await getVideojuegoByIdAPI(id);
+      setGame(data);
+      setComentario("");
+    } catch (err) {
+      alert(err.response?.data?.message || "No se pudo guardar el comentario");
+    } finally {
+      setGuardandoComentario(false);
     }
   };
 
@@ -95,6 +119,38 @@ const GameDetailPage = () => {
           <Link href={game.urlVideo} target="_blank" rel="noreferrer" underline="hover">
             Ver trailer
           </Link>
+        )}
+
+        <Divider />
+
+        <Typography variant="h6">Comentarios</Typography>
+
+        <Stack component="form" spacing={1} onSubmit={handleAddComentario}>
+          <TextField
+            label="Escribe un comentario"
+            value={comentario}
+            onChange={(e) => setComentario(e.target.value)}
+            multiline
+            minRows={2}
+          />
+          <Button type="submit" variant="outlined" disabled={guardandoComentario}>
+            {guardandoComentario ? "Guardando..." : "Añadir comentario"}
+          </Button>
+        </Stack>
+
+        {Array.isArray(game.comentarios) && game.comentarios.length > 0 ? (
+          <List>
+            {game.comentarios.map((c) => (
+              <ListItem key={c.id} alignItems="flex-start">
+                <ListItemText
+                  primary={`${c.usuario} · ${new Date(c.createdAt).toLocaleString()}`}
+                  secondary={c.texto}
+                />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography color="text.secondary">Todavia no hay comentarios.</Typography>
         )}
 
         {canDelete && (
