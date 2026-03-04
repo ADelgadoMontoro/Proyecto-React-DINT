@@ -38,6 +38,11 @@ const Layout = () => {
             <Button component={RouterLink} to="/videojuegos/nuevo" variant="contained" color="secondary">
               Nuevo
             </Button>
+            {user?.role === "admin" && (
+              <Button component={RouterLink} to="/admin/reportados" variant="contained" color="secondary">
+                Reportados
+              </Button>
+            )}
           </Stack>
 
           <Stack direction="row" spacing={1} alignItems="center">

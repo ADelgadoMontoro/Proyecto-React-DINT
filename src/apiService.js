@@ -82,3 +82,13 @@ export const reportarVideojuegoAPI = async (videojuegoId, motivo = "") => {
   );
   return response.data;
 };
+
+export const getReportadosAPI = async () => {
+  const response = await axios.get(`${API_URL}/admin/reportados`, getAuthHeaders());
+  return response.data;
+};
+
+export const deleteReportadoAPI = async (videojuegoId) => {
+  const response = await axios.delete(`${API_URL}/admin/reportados/${videojuegoId}`, getAuthHeaders());
+  return response.data;
+};

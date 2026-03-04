@@ -144,6 +144,13 @@ const authRequired = (req, res, next) => {
   }
 };
 
+const adminRequired = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Ruta solo para administrador" });
+  }
+  next();
+};
+
 app.get("/health", (_, res) => {
   res.json({ ok: true, service: "videojuegos-backend" });
 });
@@ -431,6 +438,30 @@ app.post("/videojuegos/:id/reportar", authRequired, (req, res) => {
     message: "Videojuego reportado",
     game: enrichGame(game, db.users, req.user.sub)
   });
+});
+
+app.get("/admin/reportados", authRequired, adminRequired, (req, res) => {
+  const db = readDb();
+  const reportados = db.videojuegos
+    .map((v) => enrichGame(v, db.users, req.user.sub))
+    .filter((v) => (v.reportesCount || 0) > 0)
+    .sort((a, b) => b.reportesCount - a.reportesCount);
+
+  return res.json({ data: reportados });
+});
+
+app.delete("/admin/reportados/:id", authRequired, adminRequired, (req, res) => {
+  const db = readDb();
+  const index = db.videojuegos.findIndex((v) => Number(v.id) === Number(req.params.id));
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Videojuego no encontrado" });
+  }
+
+  db.videojuegos.splice(index, 1);
+  writeDb(db);
+
+  return res.json({ message: "Videojuego reportado eliminado" });
 });
 
 app.delete("/videojuegos/:id", authRequired, (req, res) => {
