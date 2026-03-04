@@ -7,6 +7,9 @@
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:api\"",
     "build": "vite build",
     "lint": "eslint .",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "dev:e2e": "concurrently \"cross-env BACKEND_PORT=8790 npm run dev:api\" \"cross-env VITE_API_URL=http://127.0.0.1:8790 npm run dev:client -- --host 127.0.0.1 --port 4173\"",
     "preview": "vite preview",
     "dev:client": "vite",
     "dev:api": "npm run dev --prefix backend",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "cross-env": "^7.0.3",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react-swc": "^4.2.1",
@@ -33,6 +37,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "json-server": "^1.0.0-beta.3",
+    "@playwright/test": "^1.55.0",
     "vite": "^7.2.2"
   }
 }

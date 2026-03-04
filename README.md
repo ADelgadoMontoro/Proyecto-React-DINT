@@ -217,3 +217,31 @@ Incluye:
 npm run lint
 npm run build
 ```
+
+## Tests E2E (Playwright)
+
+Los tests E2E cubren:
+- Registro de usuario.
+- Login incorrecto.
+- Redireccion de rutas protegidas sin sesion.
+- Listado (nombre, portada y precio).
+- Busqueda.
+- Filtros por categorias/plataformas.
+- Paginacion.
+- Crear videojuego.
+- Ver detalle.
+- Eliminar videojuego.
+- Logout.
+
+Comandos:
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
+Modo UI:
+
+```bash
+npm run test:e2e:ui
+```

@@ -19,16 +19,17 @@ const GameCard = ({ game, onVote }) => {
       : game.descripcion;
 
   return (
-    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <Card data-testid="game-card" sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardMedia
         component="img"
         height="170"
         image={game.urlImagen || "https://picsum.photos/seed/fallback/800/450"}
         alt={game.nombre}
+        data-testid="game-image"
       />
 
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h6" sx={{ fontSize: "1.05rem", mb: 1 }}>
+        <Typography variant="h6" sx={{ fontSize: "1.05rem", mb: 1 }} data-testid="game-title">
           {game.nombre}
         </Typography>
 
@@ -40,11 +41,15 @@ const GameCard = ({ game, onVote }) => {
           {text}
         </Typography>
 
+        <Typography variant="body2" sx={{ mb: 1 }}>
+          <strong>Plataformas:</strong> {(game.plataformas || []).join(", ")}
+        </Typography>
+
         <Stack direction="row" spacing={1}>
           <Typography variant="body2" fontWeight={700}>
             Precio:
           </Typography>
-          <Typography variant="body2">{game.precio} €</Typography>
+          <Typography variant="body2" data-testid="game-price">{game.precio} €</Typography>
         </Stack>
 
         <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
@@ -73,7 +78,13 @@ const GameCard = ({ game, onVote }) => {
         >
           Dislike
         </Button>
-        <Button component={RouterLink} to={`/videojuegos/${game.id}`} variant="contained" size="small">
+        <Button
+          component={RouterLink}
+          to={`/videojuegos/${game.id}`}
+          variant="contained"
+          size="small"
+          data-testid="detail-link"
+        >
           Ver detalle
         </Button>
       </CardActions>

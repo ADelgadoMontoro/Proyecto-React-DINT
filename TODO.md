@@ -100,3 +100,18 @@
 - [x] Implementar boton flotante en la esquina inferior derecha del frontend.
 - [x] Implementar panel de chat para buscar y recomendar videojuegos.
 - [x] Documentar el flujo completo en `README.md`.
+
+## 14) V4 - Tests End-to-End (E2E)
+- [x] Configurar Playwright en el proyecto.
+- [x] Crear test E2E: registro de usuario y login posterior.
+- [x] Crear test E2E: login incorrecto con mensaje de error.
+- [x] Crear test E2E: redireccion a `/login` en ruta protegida sin sesion (`/games`).
+- [x] Crear test E2E: listado con nombre, portada y precio.
+- [x] Crear test E2E: busqueda que filtra resultados.
+- [x] Crear test E2E: filtros de categorias y plataformas.
+- [x] Crear test E2E: paginacion y pagina activa.
+- [x] Crear test E2E: alta de videojuego y verificacion en \"mis videojuegos\".
+- [x] Crear test E2E: detalle de videojuego con campos clave.
+- [x] Crear test E2E: eliminacion de videojuego y comprobacion de desaparicion.
+- [x] Crear test E2E: logout y bloqueo de rutas protegidas.
+- [x] Documentar ejecucion de E2E en `README.md`.
